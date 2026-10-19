@@ -10,8 +10,6 @@ import {
   Sparkles,
   ShieldCheck,
   UserCheck,
-  UserPlus,
-  Trash2,
   PlusCircle,
   AlertCircle,
   Eye,
@@ -541,7 +539,7 @@ export default function Module5Capacitacion({
               onClick={() => setIsAddWorkerModalOpen(true)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all shadow-md"
             >
-              <UserPlus className="w-4 h-4" />
+              <PlusCircle className="w-4 h-4" />
               <span>Registrar Nuevo Operador</span>
             </button>
             <span className="text-xs font-mono px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400">
@@ -1413,7 +1411,7 @@ export default function Module5Capacitacion({
             <div className="p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
-                  <UserPlus className="w-5 h-5" />
+                  <UserCheck className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-base sm:text-lg font-bold text-white">
@@ -1509,7 +1507,7 @@ export default function Module5Capacitacion({
                   type="submit"
                   className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold shadow-lg inline-flex items-center gap-2"
                 >
-                  <UserPlus className="w-4 h-4" />
+                  <PlusCircle className="w-4 h-4" />
                   <span>Guardar y Habilitar Expediente</span>
                 </button>
               </div>
