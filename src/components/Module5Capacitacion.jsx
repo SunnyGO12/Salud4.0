@@ -886,6 +886,7 @@ export default function Module5Capacitacion({
               <Download className="w-4 h-4" />
               Descargar Certificado Oficial (Bloqueado)
             </button>
+          </div>
         )}
 
         {/* Tabla de Historial General de Certificados Emitidos por Operador */}
