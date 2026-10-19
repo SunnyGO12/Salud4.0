@@ -1,0 +1,16 @@
+{
+  "name": "safework-4-teciromaq",
+  "private": true,
+  "version": "4.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server/server.mjs",
+    "start": "node server/server.mjs",
+    "build": "node scripts/build-standalone.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
