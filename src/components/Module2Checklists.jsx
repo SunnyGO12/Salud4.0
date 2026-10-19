@@ -9,6 +9,7 @@ import {
   Gauge,
   UserCheck,
   Lock,
+  Unlock,
   Wrench,
   PenTool,
   RotateCcw,
@@ -26,6 +27,10 @@ export default function Module2Checklists({
   setMachines,
   checklistLogs,
   setChecklistLogs,
+  workers = [],
+  setWorkers,
+  activeWorkerId,
+  setActiveWorkerId,
   addNotification,
   setActiveTab,
   triggerIoTAlertFromChecklist
@@ -33,8 +38,8 @@ export default function Module2Checklists({
   const [selectedMachineId, setSelectedMachineId] = useState(machines[0]?.id || 'EQ-CAT-320D');
   const selectedMachine = machines.find((m) => m.id === selectedMachineId) || machines[0];
 
-  const [operador, setOperador] = useState(selectedMachine.operadorAsignado);
-  const [horometro, setHorometro] = useState(String(selectedMachine.horometro));
+  const [operador, setOperador] = useState(selectedMachine?.operadorAsignado || 'Op. Carlos M. Castillo');
+  const [horometro, setHorometro] = useState(String(selectedMachine?.horometro || 0));
   const [geoPreset, setGeoPreset] = useState('SD');
   const [coordenadas, setCoordenadas] = useState('18.4861° N, 69.9312° W — Patio Central TECIROMAQ Santo Domingo');
   const [photoPreview, setPhotoPreview] = useState('hydraulic_leak'); // 'hydraulic_leak'| 'brake_wear'| 'compliant_machine'| custom dataURL
@@ -311,13 +316,17 @@ export default function Module2Checklists({
         fecha: timestamp,
         maquinaId: selectedMachine.id,
         maquinaNombre: selectedMachine.nombre,
+        machineId: selectedMachine.id,
+        machineName: selectedMachine.nombre,
         operador,
         horometro,
         coordenadas,
         resultado: 'BLOQUEO CRÍTICO LOTO',
         lotoCode: generatedLotoCode,
         workOrder: generatedWorkOrder,
-        fallasCriticas: criticalFailures.map((c) => c.titulo)
+        fallasCriticas: criticalFailures.map((c) => c.titulo),
+        fallasDetectadas: criticalFailures.map((c) => c.titulo),
+        firma: `FIRMA_DIGITAL_${operador.toUpperCase()}`
       };
       setChecklistLogs((prev) => [newLog, ...prev]);
 
@@ -363,13 +372,17 @@ export default function Module2Checklists({
         fecha: timestamp,
         maquinaId: selectedMachine.id,
         maquinaNombre: selectedMachine.nombre,
+        machineId: selectedMachine.id,
+        machineName: selectedMachine.nombre,
         operador,
         horometro,
         coordenadas,
         resultado: 'APROBADO / OPERATIVO',
         lotoCode: null,
         workOrder: null,
-        fallasCriticas: []
+        fallasCriticas: [],
+        fallasDetectadas: [],
+        firma: `FIRMA_DIGITAL_${operador.toUpperCase()}`
       };
       setChecklistLogs((prev) => [newLog, ...prev]);
 
@@ -399,12 +412,44 @@ export default function Module2Checklists({
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 shrink-0">
+            {selectedMachine?.estado === 'BLOQUEADO_LOTO' && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMachines((prev) =>
+                    prev.map((m) =>
+                      m.id === selectedMachineId
+                        ? {
+                            ...m,
+                            estado: 'OPERATIVO',
+                            lotoCode: null,
+                            workOrder: null,
+                            motivoBloqueo: null,
+                            fechaBloqueo: null
+                          }
+                        : m
+                    )
+                  );
+                  addNotification(
+                    ` Desbloqueo Técnico: ${selectedMachine.id}`,
+                    `Unidad restaurada a OPERATIVO para permitir nuevas inspecciones pre-operacionales.`,
+                    'success',
+                    'checklists'
+                  );
+                }}
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-lg"
+              >
+                <Unlock className="w-3.5 h-3.5" />
+                Habilitar {selectedMachine.id} a Operativo
+              </button>
+            )}
             <button
               type="button"
               onClick={handleSimulateCriticalFailureDemo}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-lg"
             >
-              Simular Falla Crítica (Demo 1-Clic)
+              <AlertOctagon className="w-3.5 h-3.5" />
+              Simular Falla Crítica LOTO (Demo 1-Clic)
             </button>
           </div>
         </div>
@@ -497,16 +542,52 @@ export default function Module2Checklists({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-2">
-                  Operador Asignado (Carné MOPC Cat. 05)
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={operador}
-                  onChange={(e) => setOperador(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-amber-500 focus:outline-none"
-                />
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-300">
+                    Operador Asignado (Carné MOPC Cat. 05)
+                  </label>
+                  {workers.length > 0 && (
+                    <span className="text-[11px] text-amber-400 font-mono">
+                      {workers.length} operadores registrados
+                    </span>
+                  )}
+                </div>
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    list="registered-workers-list"
+                    value={operador}
+                    onChange={(e) => setOperador(e.target.value)}
+                    placeholder="Seleccione o escriba el nombre del operador"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-amber-500 focus:outline-none"
+                  />
+                  <datalist id="registered-workers-list">
+                    {workers.map((w) => (
+                      <option key={w.id} value={w.nombre}>
+                        {w.cargo} ({w.id} • {w.cedula})
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
+                {workers.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {workers.map((w) => (
+                      <button
+                        key={w.id}
+                        type="button"
+                        onClick={() => setOperador(w.nombre)}
+                        className={`text-[11px] px-2.5 py-1 rounded-lg border transition-all ${
+                          operador === w.nombre
+                            ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
+                            : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                        }`}
+                      >
+                        {w.id}: {w.nombre.split(' ')[1] || w.nombre}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>

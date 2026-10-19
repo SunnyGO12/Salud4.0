@@ -123,6 +123,7 @@ const server = http.createServer(async (req, res) => {
       const certs = db.prepare('SELECT COUNT(*) as count FROM certificates').get();
       const loto = db.prepare('SELECT COUNT(*) as count FROM loto_history').get();
       const risks = db.prepare('SELECT COUNT(*) as count FROM risk_reports').get();
+      const workers = db.prepare('SELECT COUNT(*) as count FROM workers').get();
 
       res.writeHead(200);
       res.end(JSON.stringify({
@@ -133,7 +134,8 @@ const server = http.createServer(async (req, res) => {
           checklist_logs: logs.count,
           certificates: certs.count,
           loto_history: loto.count,
-          risk_reports: risks.count
+          risk_reports: risks.count,
+          workers: workers.count
         }
       }));
     } catch (err) {

@@ -10,22 +10,96 @@ import {
   Sparkles,
   ShieldCheck,
   UserCheck,
+  UserPlus,
+  Trash2,
+  PlusCircle,
   AlertCircle,
   Eye,
   X
 } from 'lucide-react';
-import { QUIZ_QUESTIONS } from '../data/initialData';
+import { QUIZ_QUESTIONS, INITIAL_WORKERS, INITIAL_COURSES } from '../data/initialData';
 
 export default function Module5Capacitacion({
   courses,
   setCourses,
+  workers = INITIAL_WORKERS,
+  setWorkers,
+  activeWorkerId = 'OP-001',
+  setActiveWorkerId,
+  userCoursesMap,
+  setUserCoursesMap,
   certificates,
   setCertificates,
   addNotification
 }) {
-  const [workerName, setWorkerName] = useState('Op. Carlos M. Castillo');
-  const [workerCedula, setWorkerCedula] = useState('001-1849201-4');
-  const [workerPosition, setWorkerPosition] = useState('Operador de Maquinaria Pesada (CAT / JCB)');
+  const currentWorker = workers.find((w) => w.id === activeWorkerId) || workers[0];
+  const workerName = currentWorker?.nombre || 'Op. Carlos M. Castillo';
+  const workerCedula = currentWorker?.cedula || '001-1849201-4';
+  const workerPosition = currentWorker?.cargo || 'Operador de Maquinaria Pesada';
+
+  // Modal para agregar nuevo operador manualmente
+  const [isAddWorkerModalOpen, setIsAddWorkerModalOpen] = useState(false);
+  const [newWorkerForm, setNewWorkerForm] = useState({
+    nombre: '',
+    cedula: '',
+    cargo: 'Operador de Maquinaria Pesada',
+    departamento: 'Operaciones & Movimiento de Tierras'
+  });
+
+  const handleCreateNewWorker = (e) => {
+    e.preventDefault();
+    if (!newWorkerForm.nombre.trim() || !newWorkerForm.cedula.trim()) return;
+
+    // Generar ID único incremental (e.g. OP-005)
+    const nextNum = workers.length + 1;
+    const newId = `OP-${String(nextNum).padStart(3, '0')}`;
+
+    const newWorker = {
+      id: newId,
+      nombre: newWorkerForm.nombre.trim(),
+      cedula: newWorkerForm.cedula.trim(),
+      cargo: newWorkerForm.cargo.trim() || 'Operador de Maquinaria Pesada',
+      departamento: newWorkerForm.departamento.trim() || 'Operaciones'
+    };
+
+    if (setWorkers) {
+      setWorkers((prev) => [...prev, newWorker]);
+    }
+
+    // Inicializar cursos vacíos propios para el nuevo operador
+    if (setUserCoursesMap) {
+      setUserCoursesMap((prev) => ({
+        ...prev,
+        [newId]: INITIAL_COURSES.map((course) => ({
+          ...course,
+          modulosLeidos: [false, false, false],
+          respuestaCorrectaRespondida: false,
+          progreso: 0,
+          completado: false,
+          ultimaActualizacion: 'No iniciado'
+        }))
+      }));
+    }
+
+    if (setActiveWorkerId) {
+      setActiveWorkerId(newId);
+    }
+
+    setNewWorkerForm({
+      nombre: '',
+      cedula: '',
+      cargo: 'Operador de Maquinaria Pesada',
+      departamento: 'Operaciones & Movimiento de Tierras'
+    });
+    setIsAddWorkerModalOpen(false);
+
+    addNotification(
+      `Operador Registrado: ${newWorker.nombre}`,
+      `Se creó el expediente oficial (${newId}) en la Base de Datos SQLite y se habilitó su registro individual de cursos.`,
+      'success',
+      'capacitacion'
+    );
+  };
 
   // Respuestas seleccionadas en el Examen General de 3 preguntas
   const [selectedAnswers, setSelectedAnswers] = useState({
@@ -178,7 +252,10 @@ export default function Module5Capacitacion({
   };
 
   const allCoursesCompleted = courses.every((c) => c.progreso === 100);
-  const activeCert = quizResult?.certificate || certificates[0] || null;
+  const activeCert =
+    quizResult?.certificate ||
+    certificates.find((c) => c.cedula === workerCedula || c.trabajador === workerName) ||
+    null;
   const isCertificateUnlocked = allCoursesCompleted && Boolean(activeCert);
 
   const handleEvaluateQuiz = (e) => {
@@ -444,52 +521,175 @@ export default function Module5Capacitacion({
         </div>
       </div>
 
-      {/* PASO 1: Datos del Operador Evaluado */}
-      <div className="bg-zinc-900/90 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-800">
+      {/* PASO 1: Selector y Expediente Individual de Cada Usuario */}
+      <div className="bg-zinc-900/90 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
             <UserCheck className="w-5 h-5 text-amber-400 shrink-0" />
-            <h2 className="text-base font-bold text-white">
-              1. Datos del Operador a Certificar
-            </h2>
+            <div>
+              <h2 className="text-base font-bold text-white">
+                1. Selección de Usuario / Expediente de Capacitación SST
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Cada usuario tiene su propio registro independiente de progreso, lecturas, cursos aprobados y certificados.
+              </p>
+            </div>
           </div>
-          <span className="text-xs font-mono text-slate-400">
-            Estos datos se integran en tiempo real al Certificado Oficial
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsAddWorkerModalOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all shadow-md"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>Registrar Nuevo Operador</span>
+            </button>
+            <span className="text-xs font-mono px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400">
+              Usuario Activo: {currentWorker.id}
+            </span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Selector interactivo de usuarios con fichas de estado individual + Botón para agregar */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {workers.map((w) => {
+            const isSelected = w.id === activeWorkerId;
+            const wCourses = userCoursesMap?.[w.id] || [];
+            const wCompleted = wCourses.filter((c) => c.progreso === 100).length;
+            const wProg = wCourses.length
+              ? Math.round(wCourses.reduce((acc, c) => acc + (c.progreso || 0), 0) / wCourses.length)
+              : 0;
+            const wHasCert = certificates.some((cert) => cert.cedula === w.cedula || cert.trabajador === w.nombre);
+
+            return (
+              <button
+                key={w.id}
+                type="button"
+                onClick={() => {
+                  if (setActiveWorkerId) setActiveWorkerId(w.id);
+                  setActiveCourseId(null);
+                  setSelectedAnswers({ Q1: null, Q2: null, Q3: null });
+                  setQuizResult(null);
+                  addNotification(
+                    `Expediente Activo: ${w.nombre}`,
+                    `Se cargó el historial individual de cursos (${wCompleted}/4 completados).`,
+                    'info',
+                    'capacitacion'
+                  );
+                }}
+                className={`p-4 rounded-xl text-left transition-all border flex flex-col justify-between gap-2.5 ${
+                  isSelected
+                    ? 'bg-amber-500/10 border-amber-500 shadow-md shadow-amber-500/10 ring-1 ring-amber-500/50'
+                    : 'bg-slate-950/80 hover:bg-slate-900 border-slate-800'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
+                      isSelected ? 'bg-amber-500 text-slate-950' : 'bg-zinc-800 text-slate-400'
+                    }`}>
+                      {w.id}
+                    </span>
+                    {wHasCert && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                        <Award className="w-3 h-3" /> Certificado
+                      </span>
+                    )}
+                  </div>
+                  <h4 className="text-sm font-bold text-white leading-snug">{w.nombre}</h4>
+                  <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{w.cargo}</p>
+                </div>
+
+                <div className="pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between text-[11px] font-mono">
+                    <span className="text-slate-400">Cursos: {wCompleted}/4</span>
+                    <span className={wCompleted === 4 ? 'text-emerald-400 font-bold' : 'text-amber-400'}>
+                      {wProg}%
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-slate-800 mt-1 overflow-hidden">
+                    <div
+                      className={`h-full transition-all ${wCompleted === 4 ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                      style={{ width: `${wProg}%` }}
+                    />
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+
+          {/* Tarjeta de añadir operador rápido */}
+          <button
+            type="button"
+            onClick={() => setIsAddWorkerModalOpen(true)}
+            className="p-4 rounded-xl text-center transition-all border-2 border-dashed border-slate-700 hover:border-amber-500/60 hover:bg-amber-500/5 flex flex-col items-center justify-center gap-2 group min-h-[140px]"
+          >
+            <div className="w-10 h-10 rounded-full bg-slate-800 group-hover:bg-amber-500 group-hover:text-slate-950 text-amber-400 flex items-center justify-center transition-all">
+              <PlusCircle className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-slate-300 group-hover:text-amber-400">
+              + Agregar Otro Operador
+            </span>
+            <span className="text-[10px] text-slate-400">
+              Crea expediente propio en SQLite
+            </span>
+          </button>
+        </div>
+
+        {/* Ficha editable del operador seleccionado */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-3 border-t border-slate-800">
           <div>
             <label className="block text-xs font-semibold text-slate-400 mb-1.5">
-              Nombre del Operador / Técnico
+              Nombre Completo del Operador / Técnico
             </label>
             <input
               type="text"
               value={workerName}
-              onChange={(e) => setWorkerName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm font-bold text-white"
+              onChange={(e) => {
+                const val = e.target.value;
+                if (setWorkers) {
+                  setWorkers((prev) =>
+                    prev.map((w) => (w.id === activeWorkerId ? { ...w, nombre: val } : w))
+                  );
+                }
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm font-bold text-white focus:border-amber-500 outline-none"
             />
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-400 mb-1.5">
-              Cédula de Identidad (RD)
+              Cédula de Identidad (Rep. Dominicana)
             </label>
             <input
               type="text"
               value={workerCedula}
-              onChange={(e) => setWorkerCedula(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm font-mono text-white"
+              onChange={(e) => {
+                const val = e.target.value;
+                if (setWorkers) {
+                  setWorkers((prev) =>
+                    prev.map((w) => (w.id === activeWorkerId ? { ...w, cedula: val } : w))
+                  );
+                }
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm font-mono text-white focus:border-amber-500 outline-none"
             />
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-400 mb-1.5">
-              Cargo / Equipo Asignado
+              Cargo / Especialidad Asignada
             </label>
             <input
               type="text"
               value={workerPosition}
-              onChange={(e) => setWorkerPosition(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white"
+              onChange={(e) => {
+                const val = e.target.value;
+                if (setWorkers) {
+                  setWorkers((prev) =>
+                    prev.map((w) => (w.id === activeWorkerId ? { ...w, cargo: val } : w))
+                  );
+                }
+              }}
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-amber-500 outline-none"
             />
           </div>
         </div>
@@ -686,6 +886,51 @@ export default function Module5Capacitacion({
               <Download className="w-4 h-4" />
               Descargar Certificado Oficial (Bloqueado)
             </button>
+        )}
+
+        {/* Tabla de Historial General de Certificados Emitidos por Operador */}
+        {certificates.length > 0 && (
+          <div className="pt-4 border-t border-slate-800">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+              <Award className="w-4 h-4 text-amber-400" />
+              Historial de Certificados Oficiales Emitidos en la Plataforma ({certificates.length})
+            </h4>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs font-mono">
+                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                  <tr>
+                    <th className="py-2.5 px-3">Folio</th>
+                    <th className="py-2.5 px-3">Trabajador</th>
+                    <th className="py-2.5 px-3">Cédula</th>
+                    <th className="py-2.5 px-3">Emisión</th>
+                    <th className="py-2.5 px-3">Vigencia</th>
+                    <th className="py-2.5 px-3">Calificación</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {certificates.map((cert) => {
+                    const isCurrent = cert.cedula === workerCedula;
+                    return (
+                      <tr key={cert.id} className={isCurrent ? 'bg-amber-500/10' : 'hover:bg-slate-950/60'}>
+                        <td className="py-2.5 px-3 font-bold text-amber-400">{cert.id}</td>
+                        <td className="py-2.5 px-3 font-bold text-white flex items-center gap-1.5">
+                          {cert.trabajador}
+                          {isCurrent && (
+                            <span className="text-[10px] bg-amber-500 text-slate-950 px-1.5 py-0.2 rounded font-extrabold">
+                              Activo
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-2.5 px-3 text-slate-300">{cert.cedula}</td>
+                        <td className="py-2.5 px-3 text-slate-400">{cert.fechaEmision}</td>
+                        <td className="py-2.5 px-3 text-emerald-400 font-bold">{cert.fechaVigencia}</td>
+                        <td className="py-2.5 px-3 text-emerald-400 font-bold">{cert.calificacion}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
@@ -1150,6 +1395,124 @@ export default function Module5Capacitacion({
                 Descargar Certificado Oficial Independiente
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL PARA AGREGAR NUEVO OPERADOR MANUALMENTE A LA BASE DE DATOS */}
+      {isAddWorkerModalOpen && (
+        <div
+          onClick={() => setIsAddWorkerModalOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-zinc-900 border-2 border-amber-500/70 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col"
+          >
+            <div className="p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                  <UserPlus className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white">
+                    Registrar Nuevo Operador / Trabajador
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Se almacena de forma persistente en SQLite con expediente individual de cursos
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddWorkerModalOpen(false)}
+                className="p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateNewWorker} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                  Nombre Completo del Operador *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej. Op. Nelson Batista Rosario"
+                  value={newWorkerForm.nombre}
+                  onChange={(e) =>
+                    setNewWorkerForm({ ...newWorkerForm, nombre: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-amber-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                  Cédula de Identidad y Electoral (República Dominicana) *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej. 402-2849103-5"
+                  value={newWorkerForm.cedula}
+                  onChange={(e) =>
+                    setNewWorkerForm({ ...newWorkerForm, cedula: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-mono text-white focus:border-amber-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                  Cargo / Especialidad de Maquinaria
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej. Operador de Excavadora / Pavimentadora"
+                  value={newWorkerForm.cargo}
+                  onChange={(e) =>
+                    setNewWorkerForm({ ...newWorkerForm, cargo: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-amber-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                  Departamento / Frente de Obra
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej. Frente de Obra Bávaro / Santo Domingo"
+                  value={newWorkerForm.departamento}
+                  onChange={(e) =>
+                    setNewWorkerForm({ ...newWorkerForm, departamento: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-amber-500 outline-none"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAddWorkerModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold shadow-lg inline-flex items-center gap-2"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span>Guardar y Habilitar Expediente</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

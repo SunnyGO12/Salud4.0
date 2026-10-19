@@ -105,6 +105,15 @@ function initSchema(db) {
       estado TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS workers (
+      id TEXT PRIMARY KEY,
+      nombre TEXT NOT NULL,
+      cedula TEXT NOT NULL,
+      cargo TEXT NOT NULL,
+      departamento TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 }
 
@@ -184,18 +193,22 @@ function syncRelationalTables(db, data) {
     // 2. Checklist logs
     if (Array.isArray(data.checklistLogs)) {
       const stmtLog = db.prepare(`
-        INSERT OR IGNORE INTO checklist_logs (id, machineId, machineName, operador, fecha, resultado, fallasDetectadas, firma, lotoCode)
+        INSERT OR REPLACE INTO checklist_logs (id, machineId, machineName, operador, fecha, resultado, fallasDetectadas, firma, lotoCode)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
       for (const log of data.checklistLogs) {
+        const machineId = log.machineId || log.maquinaId || 'EQ-GENERAL';
+        const machineName = log.machineName || log.maquinaNombre || 'Maquinaria Pesada';
+        const rawFallas = log.fallasDetectadas || log.fallasCriticas || [];
+        const fallasStr = Array.isArray(rawFallas) ? JSON.stringify(rawFallas) : String(rawFallas || '');
         stmtLog.run(
-          log.id || String(Date.now()),
-          log.machineId || '',
-          log.machineName || '',
-          log.operador || '',
-          log.fecha || '',
-          log.resultado || '',
-          Array.isArray(log.fallasDetectadas) ? JSON.stringify(log.fallasDetectadas) : (log.fallasDetectadas || ''),
+          log.id || `INSP-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          machineId,
+          machineName,
+          log.operador || 'Operador No Especificado',
+          log.fecha || new Date().toISOString(),
+          log.resultado || 'CONFORME',
+          fallasStr,
           log.firma || '',
           log.lotoCode || null
         );
@@ -210,18 +223,18 @@ function syncRelationalTables(db, data) {
       `);
       for (const r of data.riskReports) {
         stmtRisk.run(
-          r.id || '',
-          r.titulo || '',
-          r.area || '',
-          r.tipoPeligro || '',
+          r.id || `RSK-${Date.now()}`,
+          r.titulo || 'Riesgo reportado',
+          r.area || 'Planta / Obra',
+          r.tipoPeligro || 'Mecánico',
           r.probabilidad || 0,
           r.severidad || 0,
           r.frecuencia || 0,
           r.fineScore || 0,
-          r.nivelRiesgo || '',
-          r.estado || '',
-          r.reportadoPor || '',
-          r.fecha || '',
+          r.nivelRiesgo || 'MEDIO',
+          r.estado || 'ABIERTO',
+          r.reportadoPor || 'Inspector SST',
+          r.fecha || new Date().toISOString(),
           r.accionesPropuestas || ''
         );
       }
@@ -235,15 +248,15 @@ function syncRelationalTables(db, data) {
       `);
       for (const c of data.certificates) {
         stmtCert.run(
-          c.id || '',
-          c.courseId || '',
-          c.courseTitle || '',
-          c.studentName || '',
-          c.studentCedula || '',
-          c.issueDate || '',
+          c.id || `CERT-${Date.now()}`,
+          c.courseId || 'ALL-COURSES',
+          c.courseTitle || 'Habilitación SST Maquinaria Pesada',
+          c.studentName || c.trabajador || 'Trabajador',
+          c.studentCedula || c.cedula || '402-0000000-1',
+          c.issueDate || c.fechaEmision || new Date().toISOString(),
           c.score || 100,
-          c.verificationCode || '',
-          c.normativaRef || ''
+          c.verificationCode || c.id || '',
+          c.normativaRef || c.marcoLegal || ''
         );
       }
     }
@@ -256,16 +269,33 @@ function syncRelationalTables(db, data) {
       `);
       for (const l of data.lotoHistory) {
         stmtLoto.run(
-          l.id || '',
-          l.lotoCode || '',
-          l.machineId || '',
-          l.machineName || '',
-          l.fechaBloqueo || '',
+          l.id || `LOTO-${Date.now()}`,
+          l.lotoCode || 'LOTO-GEN',
+          l.machineId || l.maquinaId || 'EQ-GENERAL',
+          l.machineName || l.maquinaNombre || 'Maquinaria',
+          l.fechaBloqueo || new Date().toISOString(),
           l.fechaLiberacion || null,
-          l.mecanicoResponsable || '',
-          l.supervisorHse || '',
-          l.motivo || '',
-          l.estado || ''
+          l.mecanicoResponsable || l.aprobadoMantenimiento || '',
+          l.supervisorHse || l.aprobadoHSE || '',
+          l.motivo || l.motivoOriginal || '',
+          l.estado || 'LIBERADO'
+        );
+      }
+    }
+
+    // 6. Operadores y Trabajadores
+    if (Array.isArray(data.workers)) {
+      const stmtWorker = db.prepare(`
+        INSERT OR REPLACE INTO workers (id, nombre, cedula, cargo, departamento)
+        VALUES (?, ?, ?, ?, ?)
+      `);
+      for (const w of data.workers) {
+        stmtWorker.run(
+          w.id || `OP-${Date.now()}`,
+          w.nombre || 'Operador',
+          w.cedula || '000-0000000-0',
+          w.cargo || 'Operador de Maquinaria Pesada',
+          w.departamento || 'Operaciones'
         );
       }
     }

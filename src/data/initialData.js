@@ -581,3 +581,35 @@ export const INITIAL_LOTO_HISTORY = [
       'Prueba funcional de frenos al 100%']
   }
 ];
+
+export const INITIAL_WORKERS = [
+  {
+    id: 'OP-001',
+    nombre: 'Op. Carlos M. Castillo',
+    cedula: '001-1849201-4',
+    cargo: 'Operador de Excavadora Hidráulica (CAT 320D)',
+    departamento: 'Operaciones Mina & Cantera'
+  },
+  {
+    id: 'OP-002',
+    nombre: 'Op. Ramón Alcántara',
+    cedula: '002-0941824-1',
+    cargo: 'Operador de Retroexcavadora (JCB 3CX)',
+    departamento: 'Frente de Obra Punta Cana'
+  },
+  {
+    id: 'OP-003',
+    nombre: 'Op. Julio César Méndez',
+    cedula: '001-4920158-7',
+    cargo: 'Operador de Rodillo Compactador (Dynapac CA250)',
+    departamento: 'Movimiento de Tierras'
+  },
+  {
+    id: 'OP-004',
+    nombre: 'Téc. Fernando Ruiz',
+    cedula: '402-1829045-8',
+    cargo: 'Técnico Mecánico Hidráulico Especialista',
+    departamento: 'Taller Central de Mantenimiento'
+  }
+];
+

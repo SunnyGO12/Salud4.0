@@ -17,7 +17,8 @@ import {
   INITIAL_AUDITS,
   INITIAL_RISK_REPORTS,
   INITIAL_COURSES,
-  INITIAL_LOTO_HISTORY
+  INITIAL_LOTO_HISTORY,
+  INITIAL_WORKERS
 } from './data/initialData';
 
 import Module1Normativa from './components/Module1Normativa';
@@ -375,31 +376,50 @@ export default function App() {
   const [checklistLogs, setChecklistLogs] = useState(() => saved?.checklistLogs || []);
   const [iotForceAlert, setIotForceAlert] = useState(() => saved?.iotForceAlert || false);
   const [riskReports, setRiskReports] = useState(() => saved?.riskReports || INITIAL_RISK_REPORTS);
-  const [courses, setCourses] = useState(() => {
-    if (!saved?.courses) return INITIAL_COURSES;
-    return INITIAL_COURSES.map((initCourse) => {
-      const found = saved.courses.find((c) => c.id === initCourse.id);
-      if (!found) return initCourse;
-      const isRespCorrect = found.respuestaCorrectaRespondida === true;
-      const modLeidos = Array.isArray(found.modulosLeidos) && found.modulosLeidos.length === 3
-        ? found.modulosLeidos
-        : isRespCorrect
-        ? [true, true, true]
-        : initCourse.modulosLeidos;
-      const readCount = modLeidos.filter(Boolean).length;
-      const calculatedProg = Math.min(isRespCorrect ? 100 : 75, readCount * 25 + (isRespCorrect ? 25 : 0));
+  const [workers, setWorkers] = useState(() => saved?.workers || INITIAL_WORKERS);
+  const [activeWorkerId, setActiveWorkerId] = useState(() => saved?.activeWorkerId || 'OP-001');
+
+  // Registro de cursos por usuario individual: { [workerId]: coursesArray }
+  const [userCoursesMap, setUserCoursesMap] = useState(() => {
+    if (saved?.userCoursesMap && typeof saved.userCoursesMap === 'object') {
+      return saved.userCoursesMap;
+    }
+    // Inicializar cada trabajador con una copia independiente de INITIAL_COURSES
+    const initialMap = {};
+    INITIAL_WORKERS.forEach((w, index) => {
+      initialMap[w.id] = INITIAL_COURSES.map((course) => {
+        // Para OP-001 dejamos el progreso previo guardado o cursos por defecto
+        if (w.id === 'OP-001' && saved?.courses) {
+          const found = saved.courses.find((c) => c.id === course.id);
+          if (found) return { ...course, ...found };
+        }
+        return {
+          ...course,
+          modulosLeidos: [false, false, false],
+          respuestaCorrectaRespondida: false,
+          progreso: 0,
+          completado: false,
+          ultimaActualizacion: 'No iniciado'
+        };
+      });
+    });
+    return initialMap;
+  });
+
+  // Los cursos activos corresponden al trabajador seleccionado
+  const activeWorkerCourses = userCoursesMap[activeWorkerId] || INITIAL_COURSES;
+
+  const handleUpdateActiveWorkerCourses = (updater) => {
+    setUserCoursesMap((prev) => {
+      const currentList = prev[activeWorkerId] || INITIAL_COURSES;
+      const nextList = typeof updater === 'function' ? updater(currentList) : updater;
       return {
-        ...initCourse,
-        ...found,
-        modulosLeidos: modLeidos,
-        respuestaCorrectaRespondida: isRespCorrect,
-        progreso: calculatedProg,
-        completado: calculatedProg === 100 && isRespCorrect,
-        preguntaCurso: initCourse.preguntaCurso,
-        seccionesLectura: initCourse.seccionesLectura
+        ...prev,
+        [activeWorkerId]: nextList
       };
     });
-  });
+  };
+
   const [certificates, setCertificates] = useState(() => saved?.certificates || []);
   const [lotoHistory, setLotoHistory] = useState(() => saved?.lotoHistory || INITIAL_LOTO_HISTORY);
   const [notifications, setNotifications] = useState(
@@ -432,8 +452,9 @@ export default function App() {
           if (dbData.audits) setAudits(dbData.audits);
           if (dbData.checklistLogs) setChecklistLogs(dbData.checklistLogs);
           if (typeof dbData.iotForceAlert === 'boolean') setIotForceAlert(dbData.iotForceAlert);
-          if (dbData.riskReports) setRiskReports(dbData.riskReports);
-          if (dbData.courses) setCourses(dbData.courses);
+          if (dbData.workers) setWorkers(dbData.workers);
+          if (dbData.activeWorkerId) setActiveWorkerId(dbData.activeWorkerId);
+          if (dbData.userCoursesMap) setUserCoursesMap(dbData.userCoursesMap);
           if (dbData.certificates) setCertificates(dbData.certificates);
           if (dbData.lotoHistory) setLotoHistory(dbData.lotoHistory);
           if (dbData.notifications) setNotifications(dbData.notifications);
@@ -451,7 +472,9 @@ export default function App() {
       checklistLogs,
       iotForceAlert,
       riskReports,
-      courses,
+      workers,
+      activeWorkerId,
+      userCoursesMap,
       certificates,
       lotoHistory,
       notifications
@@ -484,7 +507,9 @@ export default function App() {
     checklistLogs,
     iotForceAlert,
     riskReports,
-    courses,
+    workers,
+    activeWorkerId,
+    userCoursesMap,
     certificates,
     lotoHistory,
     notifications
@@ -571,7 +596,20 @@ export default function App() {
     setChecklistLogs([]);
     setIotForceAlert(false);
     setRiskReports(INITIAL_RISK_REPORTS);
-    setCourses(INITIAL_COURSES);
+    setWorkers(INITIAL_WORKERS);
+    setActiveWorkerId('OP-001');
+    const resetMap = {};
+    INITIAL_WORKERS.forEach((w) => {
+      resetMap[w.id] = INITIAL_COURSES.map((c) => ({
+        ...c,
+        modulosLeidos: [false, false, false],
+        respuestaCorrectaRespondida: false,
+        progreso: 0,
+        completado: false,
+        ultimaActualizacion: 'No iniciado'
+      }));
+    });
+    setUserCoursesMap(resetMap);
     setCertificates([]);
     setLotoHistory(INITIAL_LOTO_HISTORY);
     addNotification(
@@ -1353,6 +1391,10 @@ export default function App() {
                   setMachines={setMachines}
                   checklistLogs={checklistLogs}
                   setChecklistLogs={setChecklistLogs}
+                  workers={workers}
+                  setWorkers={setWorkers}
+                  activeWorkerId={activeWorkerId}
+                  setActiveWorkerId={setActiveWorkerId}
                   addNotification={addNotification}
                   setActiveTab={navigateToPage}
                   triggerIoTAlertFromChecklist={() => setIotForceAlert(true)}
@@ -1383,8 +1425,14 @@ export default function App() {
 
               {currentPage === 'capacitacion'&& (
                 <Module5Capacitacion
-                  courses={courses}
-                  setCourses={setCourses}
+                  courses={activeWorkerCourses}
+                  setCourses={handleUpdateActiveWorkerCourses}
+                  workers={workers}
+                  setWorkers={setWorkers}
+                  activeWorkerId={activeWorkerId}
+                  setActiveWorkerId={setActiveWorkerId}
+                  userCoursesMap={userCoursesMap}
+                  setUserCoursesMap={setUserCoursesMap}
                   certificates={certificates}
                   setCertificates={setCertificates}
                   addNotification={addNotification}
