@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
 
 const files = [
+  path.join(ROOT_DIR, 'src/data/tectromaqLogo.js'),
   path.join(ROOT_DIR, 'src/data/initialData.js'),
   path.join(ROOT_DIR, 'src/components/Module1Normativa.jsx'),
   path.join(ROOT_DIR, 'src/components/Module2Checklists.jsx'),
