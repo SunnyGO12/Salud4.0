@@ -458,7 +458,7 @@ export default function Module3Riesgos({
               {/* Atajos rápidos de casos reales */}
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                  Plantillas Rápidas de Casos Frecuentes en TECIROMAQ (Opcional):
+                  Plantillas Rápidas de Casos Frecuentes en TECTROMAQ (Opcional):
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
                   {quickPresets.map((preset, idx) => (

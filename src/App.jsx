@@ -1,3 +1,4 @@
+import { TECTROMAQ_LOGO } from './data/tectromaqLogo.js';
 import React, { useState, useEffect } from 'react';
 import {
   ShieldAlert,
@@ -28,7 +29,7 @@ import Module4IoT from './components/Module4IoT';
 import Module5Capacitacion from './components/Module5Capacitacion';
 import Module6Loto from './components/Module6Loto';
 
-const STORAGE_KEY = 'SAFEWORK_4_TECIROMAQ_STATE_V2';
+const STORAGE_KEY = 'SAFEWORK_4_TECTROMAQ_STATE_V2';
 
 // Componente reutilizable del SVG de doble elipse dibujada a mano de Altgage
 const HandDrawnEllipse = ({ className = 'elipse-draw-svg'}) => (
@@ -76,7 +77,7 @@ const PAGE_ROUTES = {
     path: '/',
     file: 'index.html',
     num: '00',
-    title: 'Inicio — Portal TECIROMAQ',
+    title: 'TECTROMAQ — Equipos Industriales (Panaderías, Reposterías, Pizzerías, Plantas de Agua)',
     shortTitle: 'Inicio'},
   normativa: {
     path: '/normativa',
@@ -100,7 +101,7 @@ const PAGE_ROUTES = {
     subtitle: 'Checklist Pre-Operacional con Bloqueo Automático LOTO ante Fallas Críticas',
     pastelClass: 'altgage-pastel-blue',
     pokaYokeSteps: [
-      '1. Elige la máquina (CAT 320D, JCB 3CX o Dynapac)',
+      '1. Elige el equipo (Horno Rotativo, Amasadora Espiral, Planta de Agua)',
       '2. Marca cada punto: "Conforme" (Verde) o "No Conforme" (Rojo)',
       '3. Firma con el mouse/dedo y Guarda'],
     pokaYokeTip: 'Si marcas "No Conforme" en frenos o hidráulica, el sistema impide operar la máquina y activa el candado LOTO automáticamente.'},
@@ -251,7 +252,7 @@ const CALENDAR_MILESTONES = {
   6: {
     day: 6,
     title: 'Día 6: Auditoría de Extintores y Marchamos',
-    desc: 'Control de presión y vigencia de cilindros ABC en toda la flota pesada TECIROMAQ Santo Domingo.',
+    desc: 'Control de presión y vigencia de cilindros ABC en toda la flota pesada TECTROMAQ Santo Domingo.',
     page: 'normativa',
     tag: 'Alertas Regulatorias'},
   9: {
@@ -569,7 +570,7 @@ export default function App() {
               estado: 'BLOQUEADO_LOTO',
               lotoCode,
               workOrder: woCode,
-              motivoBloqueo: 'Fuga en manguera de alta presión hidráulica (Simulación 1-Clic)',
+              motivoBloqueo: 'Falla crítica de micro-switch / termostato de seguridad (Simulación 1-Clic)',
               fechaBloqueo: nowStr,
               presionHidraulica: '19,200 kPa (Caída Crítica)',
               saludBomba: 48
@@ -642,10 +643,11 @@ export default function App() {
               e.preventDefault();
               navigateToPage('home');
             }}
-            className="nav-brand-wordmark"
+            className="nav-brand-wordmark flex items-center gap-3"
             data-hidden={isScrolled ? 'true': 'false'}
           >
-            TECIROMAQ
+            <img src={TECTROMAQ_LOGO} alt="TECTROMAQ Logo" className="w-10 h-10 object-contain rounded-full shadow-md bg-white p-0.5" />
+            <span className="font-extrabold tracking-wider text-xl" style={{ fontFamily: "'Montserrat', 'Poppins', sans-serif" }}>TECTROMAQ</span>
           </a>
 
           {/* Cluster derecho: Slide horizontal Poppins + Botón Circular de 3 líneas */}
@@ -815,8 +817,7 @@ export default function App() {
                       className="text-lg sm:text-xl max-w-2xl leading-relaxed"
                       style={{ color: '#40165a'}}
                     >
-                      Plataforma integral para <strong>TECIROMAQ Santo Domingo</strong>:
-                      inspecciones pre-operacionales en 60 segundos, bloqueo preventivo de maquinaria pesada y cumplimiento normativo en tiempo real.
+                      Solución integral para <strong>TECTROMAQ</strong>: Equipos Industriales de alta exigencia para 🥐 Panaderías | 🥮 Reposterías | 🍕 Pizzerías | 💧 Plantas de Agua y más. Inspecciones pre-operacionales en 60s, micro-switches, seguridad térmica y bloqueo LOTO bajo el Reglamento 522-06.
                     </p>
 
                     {/* Botones principales con animación Altgage */}
@@ -884,7 +885,7 @@ export default function App() {
                           >
                             Estado en Vivo • Santo Domingo
                           </span>
-                          <h2 className="altgage-serif text-2xl mt-2">Flota Pesada TECIROMAQ</h2>
+                          <h2 className="altgage-serif text-2xl mt-2">Flota Pesada TECTROMAQ</h2>
                         </div>
                         <div
                           className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg"
@@ -1520,7 +1521,7 @@ export default function App() {
 
           <div className="pt-6 border-t flex flex-wrap items-center justify-between gap-4 text-xs" style={{ borderColor: '#702987'}}>
             <div>
-              <strong style={{ color: 'var(--color-primary-400)'}}>SafeWork 4.0 — TECIROMAQ Santo Domingo</strong> •
+              <strong style={{ color: 'var(--color-primary-400)'}}>SafeWork 4.0 — TECTROMAQ Santo Domingo</strong> •
               Plataforma de Seguridad y Salud Ocupacional (Decreto 522-06 / ISO 45001)
             </div>
             <button

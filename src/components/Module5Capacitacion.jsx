@@ -366,7 +366,7 @@ export default function Module5Capacitacion({
     <div class="top">
       <div>
         <div class="sub">República Dominicana • Sistema SafeWork 4.0</div>
-        <h1 class="title">TECIROMAQ S.R.L. — CERTIFICADO DE HABILITACIÓN SST</h1>
+        <h1 class="title">TECTROMAQ S.R.L. — CERTIFICADO DE HABILITACIÓN SST</h1>
       </div>
       <div class="badge">CALIFICACIÓN: ${activeCert.calificacion}</div>
     </div>
@@ -386,7 +386,7 @@ export default function Module5Capacitacion({
       </div>
       <div>
         <div class="sig-line">Ing. Laura Báez</div>
-        <div class="sig-role">Coordinadora Corporativa HSE — TECIROMAQ</div>
+        <div class="sig-role">Coordinadora Corporativa HSE — TECTROMAQ</div>
       </div>
     </div>
     <div class="footer">
@@ -1329,7 +1329,7 @@ export default function Module5Capacitacion({
                 REPÚBLICA DOMINICANA • MINISTERIO DE TRABAJO (REG. 522-06)
               </div>
               <h3 className="text-lg sm:text-xl font-extrabold text-white">
-                TECIROMAQ S.R.L. — CERTIFICADO DE HABILITACIÓN SST
+                TECTROMAQ S.R.L. — CERTIFICADO DE HABILITACIÓN SST
               </h3>
 
               <div className="p-4 rounded-xl bg-zinc-900 border border-slate-800 space-y-1">
@@ -1363,7 +1363,7 @@ export default function Module5Capacitacion({
                     Ing. Laura Báez
                   </div>
                   <div className="text-[10px] font-mono text-slate-400 uppercase mt-0.5">
-                    Coordinadora Corporativa HSE — TECIROMAQ
+                    Coordinadora Corporativa HSE — TECTROMAQ
                   </div>
                 </div>
               </div>

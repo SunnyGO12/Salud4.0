@@ -252,7 +252,7 @@ export default function Module6Loto({
           <div className="flex items-center gap-2.5">
             <AlertOctagon className="w-5 h-5 text-rose-400 shrink-0" />
             <h2 className="text-base font-bold text-white">
-              1. Estado Actual de la Flota TECIROMAQ
+              1. Estado Actual de la Flota TECTROMAQ
             </h2>
           </div>
           <span className="text-xs font-mono text-slate-400">

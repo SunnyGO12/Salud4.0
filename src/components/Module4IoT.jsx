@@ -74,7 +74,7 @@ export default function Module4IoT({
       unidad: 'mm/s',
       valor: 5.8,
       limite: 4.5,
-      normativa: 'ISO 10816 / Manual TECIROMAQ (Máx. 4.5 mm/s)',
+      normativa: 'ISO 10816 / Manual TECTROMAQ (Máx. 4.5 mm/s)',
       ubicacion: 'Excavadora CAT 320D / Retroexcavadora JCB 3CX',
       equipoAsociado: 'Bomba Hidráulica Principal de Pistones Axiales',
       accionCorrectiva: 'Programar cambio preventivo de sellos y válvula de alivio antes de las próximas 40 horas.',

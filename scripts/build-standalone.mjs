@@ -121,7 +121,7 @@ function createHtmlDocument(initialPageKey, pageTitle) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${pageTitle} | SafeWork 4.0 — Poka-Yoke SST TECIROMAQ</title>
+  <title>${pageTitle} | SafeWork 4.0 — Poka-Yoke SST TECTROMAQ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -165,7 +165,7 @@ for (const page of pagesToGenerate) {
 
 // También mantener el archivo Demo maestro sincronizado con la portada
 const demoHtml = createHtmlDocument('home', 'Portal Clínico y Salud Ocupacional');
-fs.writeFileSync(path.join(ROOT_DIR, 'SafeWork_4.0_TECIROMAQ_Demo.html'), demoHtml, 'utf8');
-fs.writeFileSync(path.join(ROOT_DIR, 'public', 'SafeWork_4.0_TECIROMAQ_Demo.html'), demoHtml, 'utf8');
+fs.writeFileSync(path.join(ROOT_DIR, 'SafeWork_4.0_TECTROMAQ_Demo.html'), demoHtml, 'utf8');
+fs.writeFileSync(path.join(ROOT_DIR, 'public', 'SafeWork_4.0_TECTROMAQ_Demo.html'), demoHtml, 'utf8');
 
 console.log('Generated Hospital/Clinical Multi-Page HTML files:', pagesToGenerate.map((p) => p.file).join(', '));

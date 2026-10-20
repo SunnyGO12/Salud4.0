@@ -38,8 +38,8 @@ export default function Module1Normativa({
   );
   const [newAuditForm, setNewAuditForm] = useState({
     tipo: 'Auditoría Interna ISO 45001 / Reg. 522-06',
-    inspector: 'Ing. Laura Báez (HSE TECIROMAQ)',
-    sede: 'TECIROMAQ Santo Domingo',
+    inspector: 'Ing. Laura Báez (HSE TECTROMAQ)',
+    sede: 'TECTROMAQ Santo Domingo',
     cumplimiento: '97.5%',
     hallazgos: 'Verificación de bloqueo LOTO y extintores en flota CAT / JCB sin desviaciones críticas.'});
 
@@ -47,7 +47,7 @@ export default function Module1Normativa({
     'Todas',
     'Leyes Dominicanas',
     'Estándares Internacionales',
-    'Manuales Internos TECIROMAQ'];
+    'Manuales Internos TECTROMAQ'];
 
   const filteredNormas = NORMATIVAS_DATA.filter((norma) => {
     const matchesCategory =
@@ -122,7 +122,7 @@ export default function Module1Normativa({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Reporte_Auditorias_SST_TECIROMAQ_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `Reporte_Auditorias_SST_TECTROMAQ_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
     addNotification(
@@ -188,7 +188,7 @@ export default function Module1Normativa({
               Repositorio Normativo, Vencimientos & Auditorías SST
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-3xl">
-              Base documental interactiva alineada con el <strong className="text-slate-200">Decreto 522-06</strong>, <strong className="text-slate-200">Resolución 04-2007 (MT)</strong>, <strong className="text-slate-200">ISO 45001:2018</strong> y <strong className="text-slate-200">OSHA 1926</strong> para operaciones de maquinaria pesada TECIROMAQ.
+              Base documental interactiva alineada con el <strong className="text-slate-200">Decreto 522-06</strong>, <strong className="text-slate-200">Resolución 04-2007 (MT)</strong>, <strong className="text-slate-200">ISO 45001:2018</strong> y <strong className="text-slate-200">OSHA 1926</strong> para operaciones de maquinaria pesada TECTROMAQ.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -277,7 +277,7 @@ export default function Module1Normativa({
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filteredNormas.map((norma) => {
             const isRD = norma.categoria === 'Leyes Dominicanas';
-            const isInternal = norma.categoria === 'Manuales Internos TECIROMAQ';
+            const isInternal = norma.categoria === 'Manuales Internos TECTROMAQ';
             return (
               <div
                 key={norma.id}
@@ -575,7 +575,7 @@ export default function Module1Normativa({
               <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30">
                 <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
-                  Aplicación Directa en SafeWork 4.0 — TECIROMAQ
+                  Aplicación Directa en SafeWork 4.0 — TECTROMAQ
                 </div>
                 <p className="text-xs text-emerald-200/90 leading-relaxed">
                   {selectedNorma.aplicacionTeciromaq}
@@ -585,7 +585,7 @@ export default function Module1Normativa({
 
             <div className="p-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between shrink-0">
               <span className="text-xs text-slate-400 font-mono">
-                Documento verificado por Dirección HSE TECIROMAQ
+                Documento verificado por Dirección HSE TECTROMAQ
               </span>
               <div className="flex items-center gap-2">
                 <button
@@ -623,7 +623,7 @@ export default function Module1Normativa({
                   REPORTE OFICIAL DE CUMPLIMIENTO SST • REPÚBLICA DOMINICANA
                 </span>
                 <h3 className="text-lg font-extrabold text-white">
-                  Acta Consolidada de Auditorías y Vencimientos Regulatorios — TECIROMAQ
+                  Acta Consolidada de Auditorías y Vencimientos Regulatorios — TECTROMAQ
                 </h3>
               </div>
               <button
@@ -638,7 +638,7 @@ export default function Module1Normativa({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
                 <div>
                   <div className="text-xs text-slate-400">Razón Social</div>
-                  <div className="font-bold text-white">TECIROMAQ S.R.L. (RNC 1-30-88492-1)</div>
+                  <div className="font-bold text-white">TECTROMAQ S.R.L. (RNC 1-30-88492-1)</div>
                 </div>
                 <div>
                   <div className="text-xs text-slate-400">Sede Principal</div>
@@ -706,7 +706,7 @@ export default function Module1Normativa({
 
             <div className="p-4 bg-slate-950 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs text-slate-400 font-mono">
-                Hash Auditable: SHA256-9F82A1D0-TECIROMAQ-SST
+                Hash Auditable: SHA256-9F82A1D0-TECTROMAQ-SST
               </span>
               <div className="flex items-center gap-2">
                 <button
@@ -773,7 +773,7 @@ export default function Module1Normativa({
                 {
                   label: 'Auditoría Interna LOTO',
                   tipo: 'Auditoría Interna ISO 45001 — Bloqueo LOTO',
-                  inspector: 'Ing. Laura Báez (HSE TECIROMAQ)',
+                  inspector: 'Ing. Laura Báez (HSE TECTROMAQ)',
                   cumplimiento: '100%',
                   hallazgos: 'Verificación de candados LOTO y doble firma en taller mecánico central sin desviaciones.'}
               ].map((preset, idx) => (

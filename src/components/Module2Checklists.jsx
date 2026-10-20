@@ -41,7 +41,7 @@ export default function Module2Checklists({
   const [operador, setOperador] = useState(selectedMachine?.operadorAsignado || 'Op. Carlos M. Castillo');
   const [horometro, setHorometro] = useState(String(selectedMachine?.horometro || 0));
   const [geoPreset, setGeoPreset] = useState('SD');
-  const [coordenadas, setCoordenadas] = useState('18.4861° N, 69.9312° W — Patio Central TECIROMAQ Santo Domingo');
+  const [coordenadas, setCoordenadas] = useState('18.4861° N, 69.9312° W — Patio Central TECTROMAQ Santo Domingo');
   const [photoPreview, setPhotoPreview] = useState('hydraulic_leak'); // 'hydraulic_leak'| 'brake_wear'| 'compliant_machine'| custom dataURL
   const [observacionesGenerales, setObservacionesGenerales] = useState('');
 
@@ -140,7 +140,7 @@ export default function Module2Checklists({
   const handleGeoChange = (preset) => {
     setGeoPreset(preset);
     if (preset === 'SD') {
-      setCoordenadas('18.4861° N, 69.9312° W — Patio Central TECIROMAQ Santo Domingo');
+      setCoordenadas('18.4861° N, 69.9312° W — Patio Central TECTROMAQ Santo Domingo');
     } else if (preset === 'PC') {
       setCoordenadas('18.5601° N, 68.3725° W — Frente de Obra Bávaro / Punta Cana');
     } else {
@@ -463,7 +463,7 @@ export default function Module2Checklists({
             1. Seleccione Activo de Maquinaria Pesada a Inspeccionar
           </h2>
           <span className="text-xs font-medium text-slate-400">
-            Flota Pesada TECIROMAQ Santo Domingo / Punta Cana
+            Flota Pesada TECTROMAQ Santo Domingo / Punta Cana
           </span>
         </div>
 
@@ -813,7 +813,7 @@ export default function Module2Checklists({
               </p>
             </div>
 
-            {/* Selector de escenario técnico específico de maquinaria pesada TECIROMAQ */}
+            {/* Selector de escenario técnico específico de maquinaria pesada TECTROMAQ */}
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"

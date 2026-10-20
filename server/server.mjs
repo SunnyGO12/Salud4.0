@@ -26,7 +26,7 @@ const ROUTE_TO_FILE = {
   '/capacitacion.html': 'capacitacion.html',
   '/liberacion-loto': 'liberacion-loto.html',
   '/liberacion-loto.html': 'liberacion-loto.html',
-  '/SafeWork_4.0_TECIROMAQ_Demo.html': 'SafeWork_4.0_TECIROMAQ_Demo.html'
+  '/SafeWork_4.0_TECTROMAQ_Demo.html': 'SafeWork_4.0_TECTROMAQ_Demo.html'
 };
 
 // Helper para parsear JSON en el cuerpo del request
@@ -218,7 +218,7 @@ server.listen(PORT, '0.0.0.0', () => {
   const mainIp = lanIps[0] || '127.0.0.1';
 
   console.log('====================================================================');
-  console.log('  SAFEWORK 4.0 — TECIROMAQ (SQLITE DATABASE & MULTI-PAGE SERVER)');
+  console.log('  SAFEWORK 4.0 — TECTROMAQ (SQLITE DATABASE & MULTI-PAGE SERVER)');
   console.log(`  ➜ BD SQLite:           database/safework_database.sqlite (WAL Mode)`);
   console.log('--------------------------------------------------------------------');
   console.log('  ENLACES DE ACCESO PRINCIPALES:');
