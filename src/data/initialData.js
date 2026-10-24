@@ -1,4 +1,4 @@
-// Datos iniciales para SafeWork 4.0 - TECTROMAQ (Equipos y Maquinarias Industriales)
+// Datos iniciales para SafeWork 4.0 en TECTROMAQ (Equipos y Maquinarias Industriales)
 // Especialistas en: Panaderías 🥐 | Reposterías 🥮 | Pizzerías 🍕 | Plantas de Agua 💧 y Más
 
 export const INITIAL_MACHINES = [
@@ -130,7 +130,7 @@ export const NORMATIVAS_DATA = [
         texto: 'Todo técnico de montaje de hornos rotativos, batidoras o bombas de agua debe validar puesta en marcha con checklist digital.'
       }
     ],
-    aplicacionTeciromaq: 'Estructura la trazabilidad y autorizaciones del sistema SafeWork 4.0 TECTROMAQ.'
+    aplicacionTeciromaq: 'Estructura la trazabilidad y autorizaciones del sistema SafeWork 4.0 en TECTROMAQ.'
   },
   {
     id: 'NORM-MAN-TECTROMAQ',
@@ -155,7 +155,7 @@ export const NORMATIVAS_DATA = [
         texto: 'Antes de limpiar espirales, cambiar rodamientos o sustituir membranas de ósmosis, desconectar el disyuntor principal y aplicar candado LOTO.'
       }
     ],
-    aplicacionTeciromaq: 'Guía técnica que rige los 6 módulos de SafeWork 4.0 TECTROMAQ.'
+    aplicacionTeciromaq: 'Guía técnica que rige los 6 módulos de SafeWork 4.0 en TECTROMAQ.'
   }
 ];
 
@@ -230,7 +230,7 @@ export const INITIAL_AUDITS = [
     inspector: 'Consultora de Higiene & SST Dominicana',
     sede: 'Área de Pruebas de Hornos y Calderas',
     cumplimiento: '94.2%',
-    hallazgos: 'Se instalaron sensores IoT continuos para calor radiante y corte automático por sobretemperatura (SafeWork 4.0).',
+    hallazgos: 'Se instalaron sensores IoT continuos para calor radiante y corte automático por sobretemperatura (TECTROMAQ).',
     estado: 'Cerrada con Mejora'
   }
 ];
@@ -444,7 +444,7 @@ export const INITIAL_COURSES = [
       {
         titulo: '2. Colocación de candado y tarjeta oficial LOTO',
         contenido:
-          'El técnico asignado coloca su candado rojo personal y etiqueta identificada con el número LOTO generado por SafeWork 4.0. La llave permanece en su poder hasta que se concluya el cambio de piezas.'
+          'El técnico asignado coloca su candado rojo personal y etiqueta identificada con el número LOTO generado por SafeWork 4.0 en TECTROMAQ. La llave permanece en su poder hasta que se concluya el cambio de piezas.'
       },
       {
         titulo: '3. Verificación de Energía Cero y Doble Firma de Retorno',

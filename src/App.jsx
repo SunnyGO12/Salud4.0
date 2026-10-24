@@ -29,7 +29,7 @@ import Module4IoT from './components/Module4IoT';
 import Module5Capacitacion from './components/Module5Capacitacion';
 import Module6Loto from './components/Module6Loto';
 
-const STORAGE_KEY = 'SAFEWORK_4_TECTROMAQ_STATE_V2';
+const STORAGE_KEY = 'TECTROMAQ_STATE_V2';
 
 // Componente reutilizable del SVG de doble elipse dibujada a mano de Altgage
 const HandDrawnEllipse = ({ className = 'elipse-draw-svg'}) => (
@@ -647,7 +647,7 @@ export default function App() {
             data-hidden={isScrolled ? 'true': 'false'}
           >
             <img src={TECTROMAQ_LOGO} alt="TECTROMAQ Logo" className="w-10 h-10 object-contain rounded-full shadow-md bg-white p-0.5" />
-            <span className="font-extrabold tracking-wider text-xl" style={{ fontFamily: "'Montserrat', 'Poppins', sans-serif" }}>TECTROMAQ</span>
+            <span className="font-extrabold tracking-tight text-lg sm:text-xl" style={{ fontFamily: "'Montserrat', 'Poppins', sans-serif" }}>SafeWork 4.0 en TECTROMAQ</span>
           </a>
 
           {/* Cluster derecho: Slide horizontal Poppins + Botón Circular de 3 líneas */}
@@ -864,80 +864,71 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Tarjeta Derecha: Semáforo de Estado de Flota en Vivo (Interactivo) */}
+                  {/* Tarjeta Derecha: Objetivos del Sistema (Estructura Limpia y Moderna) */}
                   <div className="lg:col-span-5">
                     <div
-                      className="rounded-3xl p-6 sm:p-8 shadow-2xl border-2"
+                      className="rounded-3xl p-6 sm:p-7 shadow-2xl border-2"
                       style={{ backgroundColor: '#ffffff', borderColor: 'var(--color-dark)'}}
                     >
-                      <div className="flex items-center justify-between mb-5">
-                        <div>
-                          <span
-                            className="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full"
-                            style={{ backgroundColor: 'var(--color-primary-200)', color: '#118d70'}}
-                          >
-                            Estado en Vivo • Santo Domingo
-                          </span>
-                          <h2 className="altgage-serif text-2xl mt-2">Flota Pesada TECTROMAQ</h2>
-                        </div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span
+                          className="text-sm sm:text-base font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full border shadow-sm"
+                          style={{ backgroundColor: '#f0f4fa', color: '#0f172a', borderColor: '#b8c9e4'}}
+                        >
+                          SafeWork 4.0
+                        </span>
                         <div
-                          className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg"
-                          style={{
-                            backgroundColor: lockedMachinesCount > 0 ? '#ffe4e6': '#d3ffe5',
-                            color: lockedMachinesCount > 0 ? '#e11d48': '#118d70'}}
+                          className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shadow-sm"
+                          style={{ backgroundColor: '#0f172a', color: '#ffffff'}}
                         >
-                          {machines.length - lockedMachinesCount}/{machines.length}
+                          <BookOpen className="w-4 h-4" />
                         </div>
                       </div>
 
-                      <div className="space-y-3">
-                        {machines.map((m) => {
-                          const isLocked = m.estado === 'BLOQUEADO_LOTO';
-                          return (
-                            <div
-                              key={m.id}
-                              onClick={() => navigateToPage(isLocked ? 'loto': 'inspecciones')}
-                              className="p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-between gap-3"
-                              style={{
-                                backgroundColor: isLocked ? '#fff1f2': '#f4fff8',
-                                borderColor: isLocked ? '#e11d48': '#a4f0d0'}}
-                            >
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-bold text-sm">{m.nombre}</span>
-                                  <span className="text-xs font-mono opacity-75">({m.id})</span>
-                                </div>
-                                <p className="text-xs mt-0.5" style={{ color: '#5c3178'}}>
-                                  {isLocked
-                                    ? ` ${m.lotoCode}: ${m.motivoBloqueo}`
-                                    : ` ${m.ubicacion} • ${m.horometro} hrs`}
-                                </p>
-                              </div>
-                              <span
-                                className="px-3 py-1 rounded-full text-xs font-extrabold shrink-0"
-                                style={{
-                                  backgroundColor: isLocked ? '#e11d48': '#118d70',
-                                  color: '#ffffff'}}
-                              >
-                                {isLocked ? 'Liberar →': 'Inspeccionar →'}
-                              </span>
-                            </div>
-                          );
-                        })}
+                      {/* Objetivo General */}
+                      <div
+                        className="p-4 sm:p-5 rounded-2xl mb-4 border transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg hover:border-slate-800 cursor-default group"
+                        style={{ backgroundColor: '#f0f4fa', borderColor: '#b8c9e4'}}
+                      >
+                        <h3 className="text-xs font-black tracking-wider uppercase mb-1.5 flex items-center gap-1.5" style={{ color: '#0f172a'}}>
+                          <span className="w-2 h-2 rounded-full bg-blue-600 inline-block transition-transform duration-300 group-hover:scale-125"></span>
+                          Objetivo General:
+                        </h3>
+                        <p className="text-xs sm:text-[13.5px] leading-relaxed font-semibold" style={{ color: '#0f172a'}}>
+                          Optimizar la gestión de salud ocupacional y seguridad laboral en la empresa Tectromaq, ubicada en Santo Domingo, mediante la identificación, evaluación y control de los riesgos laborales, contribuyendo a la prevención de accidentes y al fortalecimiento de la cultura de seguridad organizacional.
+                        </p>
                       </div>
 
-                      <div
-                        className="mt-5 pt-4 border-t flex items-center justify-between text-xs font-bold"
-                        style={{ borderColor: '#a4f0d0', color: '#5c3178'}}
-                      >
-                        <span>Haz clic en cualquier máquina para actuar</span>
-                        <button
-                          onClick={handleQuickDemoLockout}
-                          className="underline"
-                          style={{ color: 'var(--color-dark)'}}
-                        >
-                          Probar bloqueo automático
-                        </button>
+                      {/* Objetivos Específicos */}
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-black tracking-wider uppercase px-1" style={{ color: '#0f172a'}}>
+                          Objetivos específicos:
+                        </h4>
+
+                        <div className="space-y-2">
+                          {[
+                            'Identificar los peligros y evaluar los riesgos presentes en los procesos operativos y administrativos.',
+                            'Analizar el impacto de los incidentes y accidentes laborales registrados en la empresa.',
+                            'Diseñar una propuesta de implementación del sistema SafeWork 4.0 adaptada a las necesidades de Tectromaq.',
+                            'Establecer procedimientos y protocolos para la gestión preventiva de riesgos laborales.'
+                          ].map((item, index) => (
+                            <div
+                              key={index}
+                              className="p-3 rounded-xl border flex items-start gap-3 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-md hover:border-slate-800 hover:bg-slate-50 cursor-default group"
+                              style={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1'}}
+                            >
+                              <span
+                                className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-black shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110 shadow-sm"
+                                style={{ backgroundColor: '#0f172a', color: '#ffffff'}}
+                              >
+                                {index + 1}
+                              </span>
+                              <p className="text-xs sm:text-[13px] leading-snug font-semibold" style={{ color: '#0f172a'}}>
+                                {item}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1112,7 +1103,7 @@ export default function App() {
                           fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
                           color: 'var(--color-primary)'}}
                       >
-                        Protege vidas con SafeWork 4.0
+                        Protege vidas con SafeWork 4.0 en TECTROMAQ
                       </span>
                       <span
                         className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 mx-4"
@@ -1253,7 +1244,7 @@ export default function App() {
                         Cumplimiento total en 15 días
                       </h2>
                       <p className="text-base mt-2 leading-relaxed" style={{ color: '#40165a'}}>
-                        Haz clic en los días resaltados del calendario interactivo para ver el protocolo exacto que ejecuta SafeWork 4.0 y saltar directo a su página.
+                        Haz clic en los días resaltados del calendario interactivo para ver el protocolo exacto que ejecuta SafeWork 4.0 en TECTROMAQ y saltar directo a su página.
                       </p>
                     </div>
 
@@ -1514,7 +1505,7 @@ export default function App() {
 
           <div className="pt-6 border-t flex flex-wrap items-center justify-between gap-4 text-xs" style={{ borderColor: '#702987'}}>
             <div>
-              <strong style={{ color: 'var(--color-primary-400)'}}>SafeWork 4.0 — TECTROMAQ Santo Domingo</strong> •
+              <strong style={{ color: 'var(--color-primary-400)'}}>SafeWork 4.0 en TECTROMAQ Santo Domingo</strong> •
               Plataforma de Seguridad y Salud Ocupacional (Decreto 522-06 / ISO 45001)
             </div>
             <button

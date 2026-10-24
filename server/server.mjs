@@ -56,7 +56,7 @@ const server = http.createServer(async (req, res) => {
   const pathname = parsedUrl.pathname.replace(/\/+$/, '') || '/';
 
   // -------------------------------------------------------------
-  // API REST SQLite para SafeWork 4.0
+  // API REST SQLite para TECTROMAQ
   // -------------------------------------------------------------
   if (pathname === '/api/state') {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -154,7 +154,7 @@ const server = http.createServer(async (req, res) => {
   fs.readFile(filePath, (err, content) => {
     if (err) {
       res.writeHead(500);
-      res.end('Error loading SafeWork 4.0 Clinical Platform');
+      res.end('Error loading TECTROMAQ Clinical Platform');
       return;
     }
     res.writeHead(200, {
@@ -218,7 +218,7 @@ server.listen(PORT, '0.0.0.0', () => {
   const mainIp = lanIps[0] || '127.0.0.1';
 
   console.log('====================================================================');
-  console.log('  SAFEWORK 4.0 — TECTROMAQ (SQLITE DATABASE & MULTI-PAGE SERVER)');
+  console.log('  SafeWork 4.0 en TECTROMAQ (SQLITE DATABASE & MULTI-PAGE SERVER)');
   console.log(`  ➜ BD SQLite:           database/safework_database.sqlite (WAL Mode)`);
   console.log('--------------------------------------------------------------------');
   console.log('  ENLACES DE ACCESO PRINCIPALES:');

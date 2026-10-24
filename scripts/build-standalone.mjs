@@ -122,13 +122,13 @@ function createHtmlDocument(initialPageKey, pageTitle) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${pageTitle} | SafeWork 4.0 — Poka-Yoke SST TECTROMAQ</title>
+  <title>${pageTitle} | SafeWork 4.0 en TECTROMAQ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://use.typekit.net/ett8kja.js" type="text/javascript"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-  <style id="safework-compiled-css">
+  <style id="tectromaq-compiled-css">
 ${compiledCSS}
   </style>
   <script>

@@ -365,7 +365,7 @@ export default function Module5Capacitacion({
   <div class="diploma">
     <div class="top">
       <div>
-        <div class="sub">República Dominicana • Sistema SafeWork 4.0</div>
+        <div class="sub">República Dominicana • SafeWork 4.0 en TECTROMAQ</div>
         <h1 class="title">TECTROMAQ S.R.L. — CERTIFICADO DE HABILITACIÓN SST</h1>
       </div>
       <div class="badge">CALIFICACIÓN: ${activeCert.calificacion}</div>

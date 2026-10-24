@@ -1355,7 +1355,7 @@ export default function Module2Checklists({
 
             <div className="p-6 overflow-y-auto flex-1 space-y-4 text-sm">
               <p className="text-slate-300 leading-relaxed">
-                En cumplimiento del <strong className="text-white">Art. 3.4.1 del Reglamento 522-06</strong> y la <strong className="text-white">Cláusula 8.1.2 de ISO 45001</strong>, el sistema SafeWork 4.0 ha inhabilitado inmediatamente la operación del activo:
+                En cumplimiento del <strong className="text-white">Art. 3.4.1 del Reglamento 522-06</strong> y la <strong className="text-white">Cláusula 8.1.2 de ISO 45001</strong>, el sistema TECTROMAQ ha inhabilitado inmediatamente la operación del activo:
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-slate-950 p-4 rounded-2xl border border-slate-800">

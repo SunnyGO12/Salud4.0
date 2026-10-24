@@ -575,7 +575,7 @@ export default function Module1Normativa({
               <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30">
                 <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4" />
-                  Aplicación Directa en SafeWork 4.0 — TECTROMAQ
+                  Aplicación Directa en SafeWork 4.0 en TECTROMAQ
                 </div>
                 <p className="text-xs text-emerald-200/90 leading-relaxed">
                   {selectedNorma.aplicacionTeciromaq}
